@@ -5,6 +5,8 @@ npx create-expo-app@latest ShoppingList --template blank
 
 cd ShoppingList
 
+npm i
+
 npx expo install expo-router react-native-safe-area-context react-native-screens expo-linking expo-constants expo-status-bar
 
 npx expo start --tunnel
