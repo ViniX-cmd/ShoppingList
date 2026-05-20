@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Alert,
+    FlatList,
     ImageBackground,
     StyleSheet,
     Text,
@@ -8,12 +9,29 @@ import {
     TouchableOpacity,
     View
 } from 'react-native'
-import { icons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import ItemList from '../components/ItemList';
 
 export default function Home() {
+    const [TextInput, setTextInput] = useState('');
+    const [items, setItems] = useState([]);
 
     function addProduto() {
-        Alert.alert("Adicionar Produto");
+       // console.log(TextInput);
+       if (TextInput == '') {
+        Alert.alert(
+            'Ocorreu um problema :(',
+                'Por favor, informe o nome do produto'
+                );
+                return;
+       }
+       const newItem = {
+        id: Date.now().toString(),
+        name: TextInput, 
+        bought: false
+       };
+       setItems([...items, newItem]);
+       setTextInput('');
     }
 
     return (
@@ -29,6 +47,14 @@ export default function Home() {
                 </View>
 
                 {/* Lista de produtos */}
+                <FlatList 
+                    contentContainerStyle={{padding: 20, color: '#fff'}}
+                    data={items}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({item}) =>
+                        <ItemList item={item} />
+                }               
+                />
 
                 <View styles={styles.footer}>
                     <View style={styles.inputContainer}>
@@ -37,14 +63,15 @@ export default function Home() {
                      fontsize={18}
                      placeholder='Digite o nome do produto...'
                      placeholderTextColor="#aeaeae"
+                     value={TextInput}
+                     onChangeText={(text) => setTextInput(text)}
                      />
                     </View>
-                    <TouchableOpacity style={styles.inputContainer} >
-                       <icons name="add" size={36} color="#fff" />
-                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.iconContainer} onPress={addProduto}>
+                       <Ionicons name="add" size={36} color="#fff" />
+                    </TouchableOpacity>   
                 </View>
-
-            </ImageBackground>
+                    </ImageBackground>
             <Text>home</Text>
         </View>
     )
